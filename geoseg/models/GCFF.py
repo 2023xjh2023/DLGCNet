@@ -2,9 +2,9 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-class SpyGR_module(nn.Module):
+class FGCN(nn.Module):
     def __init__(self, C_ch, W_ch):
-        super(SpyGR_module, self).__init__()
+        super(FGCN, self).__init__()
         self.W = W_ch
         self.dp = nn.Dropout(0.3)
         self.phi = nn.Conv2d(C_ch, W_ch, 1)
