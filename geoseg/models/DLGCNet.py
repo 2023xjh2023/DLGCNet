@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 from .MPT import RVSA_MTP
 
-from .GCFF import SpyGR_module, deep_feafusion, DepConvBNReLU2d, ConvBNReLU2d, SqueezeAndExciteFusionAdd
+from .GCFF import FGCN, deep_feafusion, DepConvBNReLU2d, ConvBNReLU2d, SqueezeAndExciteFusionAdd
 from .GCFF import DepthWiseConv2d
 
 class addlayer(nn.Module):
@@ -74,12 +74,12 @@ class DLGCNet(nn.Module):
         self.MFI2 = SqueezeAndExciteFusionAdd(channels_in=768)
         self.MFI3 = SqueezeAndExciteFusionAdd(channels_in=768)
         ######################################GCFF####################################
-        self.FE_vis = nn.Sequential(SpyGR_module(C_ch, W_ch), SpyGR_module(C_ch, W_ch))
-        self.FE_D = nn.Sequential(SpyGR_module(C_ch, W_ch), SpyGR_module(C_ch, W_ch))
+        self.FE_vis = nn.Sequential(FGCN(C_ch, W_ch), FGCN(C_ch, W_ch))
+        self.FE_D = nn.Sequential(FGCN(C_ch, W_ch), FGCN(C_ch, W_ch))
         self.DFF1 = deep_feafusion(C_ch, W_ch)
         self.DFF2 = deep_feafusion(C_ch, W_ch)
-        self.DFFE_V = nn.Sequential(SpyGR_module(C_ch, W_ch), SpyGR_module(C_ch, W_ch))
-        self.DFFE_D = nn.Sequential(SpyGR_module(C_ch, W_ch), SpyGR_module(C_ch, W_ch))
+        self.DFFE_V = nn.Sequential(FGCN(C_ch, W_ch), FGCN(C_ch, W_ch))
+        self.DFFE_D = nn.Sequential(FGCN(C_ch, W_ch), FGCN(C_ch, W_ch))
         self.add = addlayer()
         #############################decoder########################################
         self.decoder3 = nn.Sequential(DepConvBNReLU2d(512 + 768, 512),
